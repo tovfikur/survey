@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Database</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header class="bg-primary text-white text-center py-4">
+        <h1>User Database</h1>
+    </header>
+    <main class="container my-4">
+        <div class="row">
+            {% for row in rows %}
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">{{ row.name }}</h5>
+                            <a href="{{ url_for('delete', the_id=row.id) }}" class="btn btn-danger btn-sm">Delete</a>
+                        </div>
+                        <div class="card-body">
+                            <p><strong>Phone Number:</strong> {{ row.phone }}</p>
+                            <p><strong>Address:</strong> {{ row.address }}</p>
+                            <p><strong>Details:</strong> <span class="text-preview">{{ row.details }}</span></p>
+                            <div class="proof-links">
+                                {% if row.proof %}
+                                    {% for filename in row.proof.split(',') %}
+                                        <a href="{{ url_for('uploaded_file', filename=filename) }}" target="_blank">{{ filename }}</a><br>
+                                    {% endfor %}
+                                {% else %}
+                                    No proof files uploaded.
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </main>
+    <footer class="bg-primary text-white text-center py-3">
+        <a href="/register" class="btn btn-light">Enter New User</a>
+    </footer>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="scripts.js"></script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f5f5;
+        }
+        
+        .card {
+            border-radius: 8px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+        }
+        
+        .card-body p {
+            margin: 10px 0;
+        }
+        
+        .text-preview {
+            display: block;
+            height: 60px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .text-preview:after {
+            content: '...';
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), #f5f5f5);
+        }
+        
+        .proof-links {
+            margin-top: 10px;
+        }
+        
+        .proof-links .btn {
+            margin-right: 5px;
+        }
+        
+    </style>
+    <script>
+        // JavaScript to handle longer text expansion (if needed)
+document.querySelectorAll('.text-preview').forEach(element => {
+    const fullText = element.textContent;
+    if (fullText.length > 100) {
+        element.textContent = fullText.slice(0, 100) + '...';
+        element.addEventListener('click', () => {
+            alert(fullText);
+        });
+    }
+});
+
+    </script>
+</body>
+</html>
